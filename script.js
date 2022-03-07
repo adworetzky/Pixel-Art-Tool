@@ -61,11 +61,11 @@ const init = () => {
   resSlider.id = 'res-slider';
   resSlider.min = 1;
   resSlider.max = 30;
-  resSlider.value = 5;
+  resSlider.value = 8;
   const sliderLabel = document.createElement('label');
   sliderLabel.setAttribute('for', 'res-Slider');
   sliderLabel.id = 'slider-label';
-  sliderLabel.textContent = 'Resolution';
+  sliderLabel.textContent = 'Resolution:' + resSlider.value;
   sliderContainer.appendChild(sliderLabel);
   sliderContainer.appendChild(resSlider);
 
@@ -88,7 +88,8 @@ const init = () => {
 
     console.log('File Uploaded');
   };
-  resSlider.oninput = function () {
+  resSlider.onchange = function () {
+    sliderLabel.textContent = 'Resolution:' + resSlider.value;
     pixelate.init();
   };
   saveButton.onclick = function () {
