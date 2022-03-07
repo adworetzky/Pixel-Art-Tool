@@ -91,6 +91,16 @@ const init = () => {
   resSlider.oninput = function () {
     pixelate.init();
   };
+  saveButton.onclick = function () {
+    const link = document.createElement('a');
+    link.download = 'download.png';
+    link.href = c
+      .toDataURL('image/png')
+      .replace('image/png', 'image/octet-stream');
+    console.log(link.href);
+    link.click();
+    link.delete;
+  };
 
   i.src = imgPath;
 };
@@ -107,10 +117,6 @@ const pixelate = {
       .pixelate()
       // .convertGrayscale()
       .convertPalette();
-
-    document.querySelector('#save-button').onclick = function () {
-      px.saveImage();
-    };
   },
 };
 
