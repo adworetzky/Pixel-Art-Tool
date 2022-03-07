@@ -21,6 +21,12 @@ const brandColors = [
   [239, 237, 233],
   [244, 216, 204],
 ];
+const brandColorsSimple = [
+  [49, 50, 76],
+  [167, 233, 241],
+  [239, 237, 233],
+  [244, 216, 204],
+];
 let resSlider;
 
 const init = () => {
@@ -82,16 +88,8 @@ const init = () => {
 
     console.log('File Uploaded');
   };
-  resSlider.onchange = function () {
+  resSlider.oninput = function () {
     pixelate.init();
-  };
-  saveButton.onclick = function () {
-    console.log(c.toDataURL());
-    const link = document.createElement('a');
-    link.download = 'download.png';
-    link.href = c.toDataURL();
-    link.click();
-    link.delete;
   };
 
   i.src = imgPath;
@@ -101,31 +99,19 @@ const pixelate = {
   init: function () {
     const c = document.querySelector('#pixelitcanvas');
     const i = document.querySelector('#pixelitimg');
-    shuffleArray(brandColors);
+
     const px = new pixelit();
     px.setScale(resSlider.value)
       .setPalette(brandColors)
       .draw()
       .pixelate()
+      // .convertGrayscale()
       .convertPalette();
+
+    document.querySelector('#save-button').onclick = function () {
+      px.saveImage();
+    };
   },
 };
 
 window.onload = init();
-
-function shuffleArray(array) {
-  for (var i = array.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1));
-    var temp = array[i];
-    array[i] = array[j];
-    array[j] = temp;
-  }
-}
-
-function scaleToFit(img, target) {
-  // get the scale
-  var scale = Math.min(target / img.width, target / img.height);
-  // get the top left position of the image
-  img.width = img.width * scale;
-  img.height = img.height * scale;
-}

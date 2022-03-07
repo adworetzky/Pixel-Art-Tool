@@ -407,7 +407,7 @@ class pixelit {
 
   saveImage() {
     const link = document.createElement('a');
-    link.download = 'pxArt.png';
+    link.download = 'download.png';
     link.href = this.drawto
       .toDataURL('image/png')
       .replace('image/png', 'image/octet-stream');
