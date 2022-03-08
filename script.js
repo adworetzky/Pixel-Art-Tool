@@ -1,3 +1,4 @@
+// A small tool to pixelize an image uploaded by a user with Orchard brand colors acting as the pseudo palette. Made for the Orchard Hackathon May 2022
 //Built using Pixelit.js
 //https://giventofly.github.io/pixelit/#docs
 
@@ -12,7 +13,7 @@
 */
 
 let imgPath = 'assets/16_CompetitiveOffer.png';
-
+let resSlider;
 const brandColors = [
   [49, 50, 76],
   [167, 233, 241],
@@ -27,17 +28,18 @@ const brandColorsSimple = [
   [239, 237, 233],
   [244, 216, 204],
 ];
-let resSlider;
 
 const init = () => {
+  // set up and append elements to the dom
+  // LOGO
   const logoImg = document.createElement('img');
-  logoImg.src = 'assets/logo.png';
+  logoImg.src = 'assets/Lockup.svg';
   logoImg.id = 'logo-img';
   document.body.appendChild(logoImg);
   const uiContainer = document.createElement('div');
   uiContainer.id = 'ui-container';
   document.body.append(uiContainer);
-
+  // UPLOAD
   const fileInput = document.createElement('input');
   fileInput.id = 'file-input';
   fileInput.type = 'file';
@@ -47,15 +49,15 @@ const init = () => {
   inputLabel.textContent = 'Upload a File';
   uiContainer.appendChild(inputLabel);
   uiContainer.appendChild(fileInput);
+  // SAVE BUTTON
   const saveButton = document.createElement('div');
   saveButton.id = 'save-button';
   saveButton.textContent = 'Save Image';
   uiContainer.appendChild(saveButton);
-
+  // SLIDER
   const sliderContainer = document.createElement('div');
   sliderContainer.id = 'slider-container';
   uiContainer.appendChild(sliderContainer);
-
   resSlider = document.createElement('input');
   resSlider.type = 'range';
   resSlider.id = 'res-slider';
@@ -68,19 +70,19 @@ const init = () => {
   sliderLabel.textContent = 'Resolution:' + resSlider.value;
   sliderContainer.appendChild(sliderLabel);
   sliderContainer.appendChild(resSlider);
-
+  // IMG
   const i = document.createElement('img');
   i.id = 'pixelitimg';
   document.body.appendChild(i);
-
+  // CANVAS
   const c = document.createElement('canvas');
   c.id = 'pixelitcanvas';
   document.body.appendChild(c);
 
+  // listeners
   i.onload = function () {
     pixelate.init();
   };
-
   fileInput.onchange = function () {
     console.log(fileInput.files[0]);
     let i = document.querySelector('#pixelitimg');
@@ -92,6 +94,7 @@ const init = () => {
     sliderLabel.textContent = 'Resolution:' + resSlider.value;
     pixelate.init();
   };
+  // Save is a bit weird on mobile, works in safari but not in chrome. Cordova packaging has a fix but should wait to see if anyone actually cares...
   saveButton.onclick = function () {
     const link = document.createElement('a');
     link.download = 'download.png';
@@ -103,14 +106,17 @@ const init = () => {
     link.delete;
   };
 
+  // set initial src of starter img
   i.src = imgPath;
 };
 
 const pixelate = {
   init: function () {
+    // pass in previously locally scoped variables
     const c = document.querySelector('#pixelitcanvas');
     const i = document.querySelector('#pixelitimg');
 
+    // main Pixelizer function
     const px = new pixelit();
     px.setScale(resSlider.value)
       .setPalette(brandColors)
@@ -121,4 +127,5 @@ const pixelate = {
   },
 };
 
+// wait for window to load to start process
 window.onload = init();
