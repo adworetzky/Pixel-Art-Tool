@@ -28,6 +28,11 @@ const brandColorsSimple = [
   [239, 237, 233],
   [244, 216, 204],
 ];
+const hackathonColors = [
+  [49, 50, 76],
+  [167, 233, 241],
+  [70, 230, 161],
+];
 
 const init = () => {
   // set up and append elements to the dom
@@ -91,10 +96,20 @@ const init = () => {
   const colorSelectSimpleLabel = document.createElement('label');
   colorSelectSimpleLabel.setAttribute('for', 'color-select-simple');
   colorSelectSimpleLabel.textContent = 'Simple brand colors';
+  const colorSelectHackathon = document.createElement('input');
+  colorSelectHackathon.type = 'radio';
+  colorSelectHackathon.name = 'colorselect';
+  colorSelectHackathon.value = 'brandColorsHackathon';
+  colorSelectHackathon.id = 'color-select-hackathon';
+  const colorSelectHackathonLabel = document.createElement('label');
+  colorSelectHackathonLabel.setAttribute('for', 'color-select-hackathon');
+  colorSelectHackathonLabel.textContent = 'Hackathon colors';
   colorSelectContainer.appendChild(colorSelectFullLabel);
   colorSelectContainer.appendChild(colorSelectFull);
   colorSelectContainer.appendChild(colorSelectSimpleLabel);
   colorSelectContainer.appendChild(colorSelectSimple);
+  colorSelectContainer.appendChild(colorSelectHackathonLabel);
+  colorSelectContainer.appendChild(colorSelectHackathon);
   // IMG
   const i = document.createElement('img');
   i.id = 'pixelitimg';
@@ -124,6 +139,9 @@ const init = () => {
     pixelate.init();
   };
   colorSelectSimple.onchange = function () {
+    pixelate.init();
+  };
+  colorSelectHackathon.onchange = function () {
     pixelate.init();
   };
   // Save is a bit weird on mobile, works in safari but not in chrome. Cordova packaging has a fix but should wait to see if anyone actually cares...
@@ -161,10 +179,20 @@ const pixelate = {
         .pixelate()
         // .convertGrayscale()
         .convertPalette();
-    } else {
+    } else if (document.querySelector('#color-select-full').checked == true) {
       console.log('full color palette selected');
       px.setScale(resSlider.value)
         .setPalette(brandColors)
+        .draw()
+        .pixelate()
+        // .convertGrayscale()
+        .convertPalette();
+    } else if (
+      document.querySelector('#color-select-hackathon').checked == true
+    ) {
+      console.log('full color palette selected');
+      px.setScale(resSlider.value)
+        .setPalette(hackathonColors)
         .draw()
         .pixelate()
         // .convertGrayscale()
