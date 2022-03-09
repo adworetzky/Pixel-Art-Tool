@@ -65,11 +65,36 @@ const init = () => {
   resSlider.max = 30;
   resSlider.value = 8;
   const sliderLabel = document.createElement('label');
-  sliderLabel.setAttribute('for', 'res-Slider');
+  sliderLabel.setAttribute('for', 'res-slider');
   sliderLabel.id = 'slider-label';
   sliderLabel.textContent = 'Resolution:' + resSlider.value;
   sliderContainer.appendChild(sliderLabel);
   sliderContainer.appendChild(resSlider);
+
+  const colorSelectContainer = document.createElement('div');
+  colorSelectContainer.id = 'color-select-container';
+  uiContainer.appendChild(colorSelectContainer);
+  const colorSelectFull = document.createElement('input');
+  colorSelectFull.type = 'radio';
+  colorSelectFull.name = 'colorselect';
+  colorSelectFull.value = 'brandColors';
+  colorSelectFull.id = 'color-select-full';
+  colorSelectFull.checked = true;
+  const colorSelectFullLabel = document.createElement('label');
+  colorSelectFullLabel.setAttribute('for', 'color-select-full');
+  colorSelectFullLabel.textContent = 'All brand colors';
+  const colorSelectSimple = document.createElement('input');
+  colorSelectSimple.type = 'radio';
+  colorSelectSimple.name = 'colorselect';
+  colorSelectSimple.value = 'brandColorsSimple';
+  colorSelectSimple.id = 'color-select-simple';
+  const colorSelectSimpleLabel = document.createElement('label');
+  colorSelectSimpleLabel.setAttribute('for', 'color-select-simple');
+  colorSelectSimpleLabel.textContent = 'Simple brand colors';
+  colorSelectContainer.appendChild(colorSelectFullLabel);
+  colorSelectContainer.appendChild(colorSelectFull);
+  colorSelectContainer.appendChild(colorSelectSimpleLabel);
+  colorSelectContainer.appendChild(colorSelectSimple);
   // IMG
   const i = document.createElement('img');
   i.id = 'pixelitimg';
@@ -94,6 +119,13 @@ const init = () => {
     sliderLabel.textContent = 'Resolution:' + resSlider.value;
     pixelate.init();
   };
+
+  colorSelectFull.onchange = function () {
+    pixelate.init();
+  };
+  colorSelectSimple.onchange = function () {
+    pixelate.init();
+  };
   // Save is a bit weird on mobile, works in safari but not in chrome. Cordova packaging has a fix but should wait to see if anyone actually cares...
   saveButton.onclick = function () {
     const link = document.createElement('a');
@@ -104,6 +136,9 @@ const init = () => {
     console.log(link.href);
     link.click();
     link.delete;
+    // open in a image in new tab BROKEN
+    // console.log(c.toDataURL());
+    // window.open(c.toDataURL('image/png'), '_blank');
   };
 
   // set initial src of starter img
@@ -118,12 +153,23 @@ const pixelate = {
 
     // main Pixelizer function
     const px = new pixelit();
-    px.setScale(resSlider.value)
-      .setPalette(brandColors)
-      .draw()
-      .pixelate()
-      // .convertGrayscale()
-      .convertPalette();
+    if (document.querySelector('#color-select-simple').checked == true) {
+      console.log('simple color palette selected');
+      px.setScale(resSlider.value)
+        .setPalette(brandColorsSimple)
+        .draw()
+        .pixelate()
+        // .convertGrayscale()
+        .convertPalette();
+    } else {
+      console.log('full color palette selected');
+      px.setScale(resSlider.value)
+        .setPalette(brandColors)
+        .draw()
+        .pixelate()
+        // .convertGrayscale()
+        .convertPalette();
+    }
   },
 };
 
